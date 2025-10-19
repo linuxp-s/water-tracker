@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日喝水记录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #5ec3d8;
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .date {
+            color: #a8a8a8;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .water-icon {
+            margin: 20px 0;
+            filter: drop-shadow(0 5px 15px rgba(94, 195, 216, 0.3));
+            min-height: 160px;
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .water-drop {
+            position: absolute;
+            font-size: 40px;
+            animation: dropIn 0.5s ease;
+            transition: all 0.5s ease;
+        }
+
+        @keyframes dropIn {
+            0% {
+                transform: translateY(-20px) scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translateY(5px) scale(1.1);
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .count-display {
+            background: linear-gradient(135deg, #a8edea 0%, #c4e8f5 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .count-number {
+            font-size: 64px;
+            font-weight: bold;
+            color: #4a9fb8;
+            line-height: 1;
+        }
+
+        .count-label {
+            color: #6bb6c9;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            border: none;
+            border-radius: 20px;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(255, 216, 155, 0.4);
+        }
+
+        .add-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 10px rgba(255, 216, 155, 0.4);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(251, 194, 235, 0.4);
+        }
+
+        .reset-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 10px rgba(251, 194, 235, 0.4);
+        }
+
+        .tip {
+            color: #b8b8b8;
+            font-size: 13px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .goal {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            color: #d63031;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            height: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #74b9ff 0%, #0984e3 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .water-icon {
+                width: 140px;
+                height: 140px;
+                min-height: 140px;
+            }
+
+            .water-drop {
+                font-size: 32px;
+            }
+
+            .count-number {
+                font-size: 52px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 16px;
+            }
+        }
+
+        @keyframes splash {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .splash {
+            animation: splash 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💧 每日喝水记录</h1>
+        <div class="date" id="dateDisplay"></div>
+        
+        <div class="water-icon" id="waterIcon"></div>
+        
+        <div class="count-display">
+            <div class="count-number" id="countNumber">0</div>
+            <div class="count-label">今日已喝水</div>
+        </div>
+
+        <div class="goal">
+            <div>今日目标：8 杯水</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="add-btn" id="addBtn">+ 喝了一杯</button>
+            <button class="reset-btn" id="resetBtn">清零</button>
+        </div>
+
+        <div class="tip">💡 点击按钮记录喝水<br>长按"清零"按钮重置今日记录</div>
+    </div>
+
+    <script>
+        let count = 0;
+        let longPressTimer;
+        const GOAL = 8;
+
+        const countNumber = document.getElementById('countNumber');
+        const progressFill = document.getElementById('progressFill');
+        const waterIcon = document.getElementById('waterIcon');
+        const addBtn = document.getElementById('addBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const dateDisplay = document.getElementById('dateDisplay');
+
+        // 显示当前日期
+        function updateDate() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            dateDisplay.textContent = now.toLocaleDateString('zh-CN', options);
+        }
+
+        // 从内存中加载数据
+        function loadData() {
+            const today = new Date().toLocaleDateString('zh-CN');
+            const savedData = window.waterData || { date: today, count: 0 };
+            
+            if (savedData.date === today) {
+                count = savedData.count;
+            } else {
+                count = 0;
+                window.waterData = { date: today, count: 0 };
+            }
+            updateDisplay();
+        }
+
+        // 保存数据到内存
+        function saveData() {
+            const today = new Date().toLocaleDateString('zh-CN');
+            window.waterData = { date: today, count: count };
+        }
+
+        // 更新显示
+        function updateDisplay() {
+            countNumber.textContent = count;
+            const progress = Math.min((count / GOAL) * 100, 100);
+            progressFill.style.width = progress + '%';
+            
+            // 更新水滴显示 - 圆形排列
+            waterIcon.innerHTML = '';
+            
+            if (count === 0) {
+                // 如果没有水滴，显示空杯子
+                waterIcon.innerHTML = '<span style="font-size: 60px; opacity: 0.3; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">🥤</span>';
+            } else {
+                const radius = 50; // 圆形半径
+                const centerX = 80; // 中心点X
+                const centerY = 80; // 中心点Y
+                
+                for (let i = 0; i < count; i++) {
+                    const drop = document.createElement('span');
+                    drop.className = 'water-drop';
+                    drop.textContent = '💧';
+                    
+                    // 计算圆形排列位置
+                    const angle = (i / count) * 2 * Math.PI - Math.PI / 2; // 从顶部开始
+                    const x = centerX + radius * Math.cos(angle) - 20; // -20 是为了居中emoji
+                    const y = centerY + radius * Math.sin(angle) - 20;
+                    
+                    drop.style.left = x + 'px';
+                    drop.style.top = y + 'px';
+                    
+                    waterIcon.appendChild(drop);
+                }
+            }
+        }
+
+        // 增加计数
+        function addCount() {
+            count++;
+            updateDisplay();
+            saveData();
+        }
+
+        // 重置计数
+        function resetCount() {
+            count = 0;
+            updateDisplay();
+            saveData();
+        }
+
+        // 点击增加
+        addBtn.addEventListener('click', addCount);
+
+        // 长按重置
+        resetBtn.addEventListener('mousedown', () => {
+            longPressTimer = setTimeout(() => {
+                if (confirm('确定要重置今日记录吗？')) {
+                    resetCount();
+                }
+            }, 800);
+        });
+
+        resetBtn.addEventListener('mouseup', () => {
+            clearTimeout(longPressTimer);
+        });
+
+        resetBtn.addEventListener('mouseleave', () => {
+            clearTimeout(longPressTimer);
+        });
+
+        // 触摸设备支持
+        resetBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            longPressTimer = setTimeout(() => {
+                if (confirm('确定要重置今日记录吗？')) {
+                    resetCount();
+                }
+            }, 800);
+        });
+
+        resetBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            clearTimeout(longPressTimer);
+        });
+
+        // 初始化
+        updateDate();
+        loadData();
+    </script>
+</body>
+</html>
