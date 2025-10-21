@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>上海天气预报</title>
+    <title>上海 & Espoo 天气预报</title>
     <style>
         * {
             margin: 0;
@@ -15,49 +15,41 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
         }
 
         .container {
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            margin-bottom: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         h1 {
             text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 28px;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 32px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .refresh-btn {
             display: block;
-            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 30px;
             padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: white;
+            color: #667eea;
             border: none;
             border-radius: 10px;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .refresh-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
         .refresh-btn:active {
@@ -69,11 +61,48 @@
             cursor: not-allowed;
         }
 
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .city-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            transition: transform 0.3s;
+        }
+
+        .city-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .city-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .city-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .city-flag {
+            font-size: 32px;
+        }
+
         .loading {
             text-align: center;
             color: #666;
             padding: 20px;
-            display: none;
         }
 
         .error {
@@ -82,7 +111,6 @@
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
-            display: none;
             white-space: pre-line;
             line-height: 1.6;
         }
@@ -113,7 +141,7 @@
         }
 
         .forecast-title {
-            font-size: 20px;
+            font-size: 18px;
             color: #333;
             margin-bottom: 15px;
             font-weight: bold;
@@ -121,54 +149,60 @@
 
         .forecast-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
 
         .forecast-item {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
             text-align: center;
             transition: transform 0.2s;
         }
 
         .forecast-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
         }
 
         .forecast-date {
             font-weight: bold;
             color: #333;
-            margin-bottom: 10px;
-            font-size: 14px;
+            margin-bottom: 8px;
+            font-size: 13px;
         }
 
         .forecast-icon {
-            font-size: 40px;
-            margin: 10px 0;
+            font-size: 32px;
+            margin: 8px 0;
         }
 
         .forecast-text {
             color: #666;
             margin: 5px 0;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .forecast-temp {
             color: #667eea;
             font-weight: bold;
-            margin-top: 10px;
-            font-size: 16px;
+            margin-top: 8px;
+            font-size: 14px;
         }
 
-        @media (max-width: 480px) {
-            .card {
-                padding: 20px;
+        @media (max-width: 1100px) {
+            .cities-grid {
+                grid-template-columns: 1fr;
             }
+        }
 
+        @media (max-width: 600px) {
             h1 {
                 font-size: 24px;
+            }
+
+            .city-card {
+                padding: 20px;
             }
 
             .current-temp {
@@ -183,27 +217,56 @@
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <h1>🌤️ 上海天气预报</h1>
-            <button class="refresh-btn" onclick="getWeather()">🔄 刷新天气</button>
-            <div class="loading" id="loading">加载中...</div>
-            <div class="error" id="error"></div>
-            <div id="weatherData" style="display: none;">
-                <div class="current-weather">
-                    <div class="weather-icon" id="currentIcon"></div>
-                    <div class="current-temp" id="currentTemp"></div>
-                    <div class="current-text" id="currentText"></div>
+        <h1>🌍 全球天气预报</h1>
+        <button class="refresh-btn" onclick="getAllWeather()">🔄 刷新所有城市天气</button>
+        
+        <div class="cities-grid">
+            <!-- 上海 -->
+            <div class="city-card">
+                <div class="city-header">
+                    <div class="city-name">上海 Shanghai</div>
+                    <div class="city-flag">🇨🇳</div>
                 </div>
-                <div class="forecast-title">未来三天预报</div>
-                <div class="forecast-grid" id="forecastGrid"></div>
+                <div class="loading" id="loading-shanghai">加载中...</div>
+                <div class="error" id="error-shanghai" style="display: none;"></div>
+                <div id="weather-shanghai" style="display: none;">
+                    <div class="current-weather">
+                        <div class="weather-icon" id="shanghai-current-icon"></div>
+                        <div class="current-temp" id="shanghai-current-temp"></div>
+                        <div class="current-text" id="shanghai-current-text"></div>
+                    </div>
+                    <div class="forecast-title">未来三天预报</div>
+                    <div class="forecast-grid" id="shanghai-forecast"></div>
+                </div>
+            </div>
+
+            <!-- Espoo -->
+            <div class="city-card">
+                <div class="city-header">
+                    <div class="city-name">埃斯波 Espoo</div>
+                    <div class="city-flag">🇫🇮</div>
+                </div>
+                <div class="loading" id="loading-espoo">加载中...</div>
+                <div class="error" id="error-espoo" style="display: none;"></div>
+                <div id="weather-espoo" style="display: none;">
+                    <div class="current-weather">
+                        <div class="weather-icon" id="espoo-current-icon"></div>
+                        <div class="current-temp" id="espoo-current-temp"></div>
+                        <div class="current-text" id="espoo-current-text"></div>
+                    </div>
+                    <div class="forecast-title">未来三天预报</div>
+                    <div class="forecast-grid" id="espoo-forecast"></div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 上海坐标
-        const SHANGHAI_LAT = 31.2304;
-        const SHANGHAI_LON = 121.4737;
+        // 城市坐标
+        const cities = {
+            shanghai: { lat: 31.2304, lon: 121.4737, name: '上海' },
+            espoo: { lat: 60.2055, lon: 24.6559, name: 'Espoo' }
+        };
 
         // WMO 天气代码映射
         const weatherCodeMap = {
@@ -264,22 +327,19 @@
             return null;
         }
 
-        async function getWeather() {
-            const loading = document.getElementById('loading');
-            const error = document.getElementById('error');
-            const weatherData = document.getElementById('weatherData');
-            const btn = document.querySelector('.refresh-btn');
+        async function getWeatherForCity(cityKey) {
+            const city = cities[cityKey];
+            const loading = document.getElementById(`loading-${cityKey}`);
+            const error = document.getElementById(`error-${cityKey}`);
+            const weatherData = document.getElementById(`weather-${cityKey}`);
 
-            // 显示加载状态
             loading.style.display = 'block';
             error.style.display = 'none';
             weatherData.style.display = 'none';
-            btn.disabled = true;
 
             try {
-                // 调用 Open-Meteo API
                 const response = await fetch(
-                    `https://api.open-meteo.com/v1/forecast?latitude=${SHANGHAI_LAT}&longitude=${SHANGHAI_LON}&daily=temperature_2m_max,temperature_2m_min,weathercode&current_weather=true&timezone=Asia%2FShanghai&forecast_days=4`
+                    `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&daily=temperature_2m_max,temperature_2m_min,weathercode&current_weather=true&timezone=auto&forecast_days=4`
                 );
 
                 if (!response.ok) {
@@ -292,15 +352,14 @@
                 const currentWeather = data.current_weather;
                 const currentWeatherInfo = getWeatherInfo(currentWeather.weathercode);
                 
-                document.getElementById('currentIcon').textContent = currentWeatherInfo.icon;
-                document.getElementById('currentTemp').textContent = `${Math.round(currentWeather.temperature)}°C`;
-                document.getElementById('currentText').textContent = currentWeatherInfo.text;
+                document.getElementById(`${cityKey}-current-icon`).textContent = currentWeatherInfo.icon;
+                document.getElementById(`${cityKey}-current-temp`).textContent = `${Math.round(currentWeather.temperature)}°C`;
+                document.getElementById(`${cityKey}-current-text`).textContent = currentWeatherInfo.text;
 
-                // 显示未来3天预报（跳过今天，显示后3天）
-                const forecastGrid = document.getElementById('forecastGrid');
+                // 显示未来3天预报
+                const forecastGrid = document.getElementById(`${cityKey}-forecast`);
                 forecastGrid.innerHTML = '';
                 
-                // 从第二天开始（索引1），显示3天
                 for (let i = 1; i <= 3; i++) {
                     const weatherInfo = getWeatherInfo(data.daily.weathercode[i]);
                     const dateLabel = isTodayOrTomorrow(data.daily.time[i]);
@@ -319,25 +378,37 @@
 
                 weatherData.style.display = 'block';
             } catch (err) {
-                let errorMsg = '❌ 获取天气失败';
+                let errorMsg = `❌ 获取${city.name}天气失败`;
                 
                 if (err.message.includes('Failed to fetch')) {
-                    errorMsg += '：网络连接失败\n\n可能的原因：\n1. 网络连接不稳定\n2. 使用 file:// 协议打开（建议用本地服务器）\n3. 防火墙或代理阻止了请求\n\n解决方法：\n• 使用 Python: python -m http.server 8000\n• 使用 VS Code 的 Live Server 插件\n• 或将文件上传到在线托管服务';
+                    errorMsg += '\n\n请使用本地服务器打开此页面\n例如: python -m http.server 8000';
                 } else {
-                    errorMsg += `：${err.message}`;
+                    errorMsg += `\n${err.message}`;
                 }
                 
                 error.textContent = errorMsg;
                 error.style.display = 'block';
-                console.error('获取天气失败:', err);
+                console.error(`获取${city.name}天气失败:`, err);
             } finally {
                 loading.style.display = 'none';
-                btn.disabled = false;
             }
         }
 
-        // 页面加载时自动获取天气
-        window.onload = getWeather;
+        async function getAllWeather() {
+            const btn = document.querySelector('.refresh-btn');
+            btn.disabled = true;
+
+            // 并行获取所有城市的天气
+            await Promise.all([
+                getWeatherForCity('shanghai'),
+                getWeatherForCity('espoo')
+            ]);
+
+            btn.disabled = false;
+        }
+
+        // 页面加载时自动获取所有城市天气
+        window.onload = getAllWeather;
     </script>
 </body>
 </html>
