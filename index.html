@@ -15,7 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px;
         }
 
         .container {
@@ -27,9 +27,9 @@
             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
             color: white;
             text-align: center;
-            padding: 25px;
-            border-radius: 20px;
-            margin-bottom: 30px;
+            padding: 20px 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             animation: pulse 2s ease-in-out infinite;
         }
@@ -40,20 +40,20 @@
         }
 
         .countdown-title {
-            font-size: 28px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 10px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .countdown-days {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: bold;
             text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
         }
 
         .countdown-subtitle {
-            font-size: 16px;
+            font-size: 14px;
             opacity: 0.9;
             margin-top: 5px;
         }
@@ -61,21 +61,22 @@
         h1 {
             text-align: center;
             color: white;
-            margin-bottom: 30px;
-            font-size: 32px;
+            margin-bottom: 20px;
+            font-size: 24px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .refresh-btn {
             display: block;
+            width: 100%;
             max-width: 300px;
-            margin: 0 auto 30px;
-            padding: 15px;
+            margin: 0 auto 20px;
+            padding: 12px;
             background: white;
             color: #667eea;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
@@ -98,16 +99,16 @@
 
         .cities-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         .city-card {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 20px;
             transition: transform 0.3s;
         }
 
@@ -119,67 +120,68 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
             border-bottom: 2px solid #f0f0f0;
         }
 
         .city-name {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
             color: #333;
         }
 
         .city-flag {
-            font-size: 32px;
+            font-size: 28px;
         }
 
         .loading {
             text-align: center;
             color: #666;
-            padding: 20px;
+            padding: 15px;
+            font-size: 14px;
         }
 
         .error {
             background: #fee;
             color: #c33;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-size: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 13px;
             white-space: pre-line;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .current-weather {
             text-align: center;
-            padding: 20px 0;
+            padding: 15px 0;
             border-bottom: 2px solid #f0f0f0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .current-temp {
-            font-size: 48px;
+            font-size: 40px;
             font-weight: bold;
             color: #667eea;
-            margin: 10px 0;
+            margin: 8px 0;
         }
 
         .current-text {
-            font-size: 20px;
+            font-size: 18px;
             color: #666;
-            margin: 10px 0;
+            margin: 8px 0;
         }
 
         .weather-icon {
-            font-size: 64px;
-            margin: 10px 0;
+            font-size: 56px;
+            margin: 8px 0;
         }
 
         .forecast-title {
-            font-size: 18px;
+            font-size: 16px;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-weight: bold;
         }
 
@@ -213,47 +215,162 @@
 
         .forecast-item {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 16px;
-            border-radius: 15px;
+            padding: 12px 8px;
+            border-radius: 12px;
             text-align: center;
-            min-width: 100px;
+            min-width: 85px;
             flex-shrink: 0;
             transition: transform 0.2s;
         }
 
         .forecast-item:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
         .forecast-date {
             font-weight: bold;
             color: #333;
-            margin-bottom: 8px;
-            font-size: 13px;
-            line-height: 1.4;
+            margin-bottom: 6px;
+            font-size: 12px;
+            line-height: 1.3;
         }
 
         .forecast-icon {
-            font-size: 36px;
-            margin: 8px 0;
+            font-size: 32px;
+            margin: 6px 0;
         }
 
         .forecast-text {
             color: #666;
-            margin: 6px 0;
-            font-size: 13px;
+            margin: 4px 0;
+            font-size: 12px;
         }
 
         .forecast-temp {
             color: #667eea;
             font-weight: bold;
-            margin-top: 8px;
-            font-size: 14px;
+            margin-top: 6px;
+            font-size: 13px;
         }
 
         @media (max-width: 1000px) {
             .cities-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .countdown {
+                padding: 25px;
+                border-radius: 20px;
+                margin-bottom: 30px;
+            }
+
+            .countdown-title {
+                font-size: 28px;
+            }
+
+            .countdown-days {
+                font-size: 48px;
+            }
+
+            .countdown-subtitle {
+                font-size: 16px;
+            }
+
+            h1 {
+                font-size: 32px;
+                margin-bottom: 30px;
+            }
+
+            .refresh-btn {
+                padding: 15px;
+                font-size: 16px;
+                margin-bottom: 30px;
+            }
+
+            .cities-grid {
+                grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+                gap: 30px;
+                margin-bottom: 30px;
+            }
+
+            .city-card {
+                padding: 30px;
+                border-radius: 20px;
+            }
+
+            .city-header {
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+
+            .city-name {
+                font-size: 24px;
+            }
+
+            .city-flag {
+                font-size: 32px;
+            }
+
+            .current-weather {
+                padding: 20px 0;
+                margin-bottom: 20px;
+            }
+
+            .current-temp {
+                font-size: 48px;
+                margin: 10px 0;
+            }
+
+            .current-text {
+                font-size: 20px;
+                margin: 10px 0;
+            }
+
+            .weather-icon {
+                font-size: 64px;
+                margin: 10px 0;
+            }
+
+            .forecast-title {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+
+            .forecast-item {
+                padding: 16px;
+                border-radius: 15px;
+                min-width: 100px;
+            }
+
+            .forecast-item:hover {
+                transform: translateY(-3px);
+            }
+
+            .forecast-date {
+                font-size: 13px;
+                margin-bottom: 8px;
+                line-height: 1.4;
+            }
+
+            .forecast-icon {
+                font-size: 36px;
+                margin: 8px 0;
+            }
+
+            .forecast-text {
+                font-size: 13px;
+                margin: 6px 0;
+            }
+
+            .forecast-temp {
+                font-size: 14px;
+                margin-top: 8px;
             }
         }
 
