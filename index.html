@@ -49,15 +49,17 @@
         }
 
         .countdown-days {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: bold;
             text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            line-height: 1.4;
         }
 
         .countdown-subtitle {
             font-size: 14px;
             opacity: 0.9;
             margin-top: 5px;
+            display: none;
         }
 
         h1 {
@@ -459,9 +461,8 @@
 <body>
     <div class="container">
         <div class="countdown">
-            <div class="countdown-title">✈️ 出发日期 2026年2月13日 ✈️</div>
-            <div class="countdown-days" id="countdownDays">计算中...</div>
-            <div class="countdown-subtitle" id="countdownSubtitle">准备出发！</div>
+            <div class="countdown-title">✈️ 出发时间 2026年2月13日 08:25 AM ✈️</div>
+            <div class="countdown-days" id="countdownDisplay">计算中...</div>
         </div>
 
         <h1>🌍 天气预报</h1>
@@ -539,34 +540,36 @@
         }
 
         function calculateCountdown() {
-            // 出发日期：2026年2月13日
-            const departureDate = new Date('2026-02-13');
+            // 出发时间：2026年2月13日 08:25 AM
+            const departureDate = new Date('2026-02-13T08:25:00');
             const now = new Date();
             
-            // 设置时间为当天的开始
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            departureDate.setHours(0, 0, 0, 0);
+            // 计算时间差（毫秒）
+            const diffTime = departureDate - now;
             
-            // 计算天数差
-            const diffTime = departureDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays > 0) {
-                document.getElementById('countdownDays').textContent = `还有 ${diffDays} 天`;
-                document.getElementById('countdownSubtitle').textContent = '准备出发！';
-            } else if (diffDays === 0) {
-                document.getElementById('countdownDays').textContent = '今天出发！';
-                document.getElementById('countdownSubtitle').textContent = '🎉 祝旅途愉快！';
+            if (diffTime > 0) {
+                // 计算天、小时、分钟、秒
+                const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+                
+                document.getElementById('countdownDisplay').textContent = 
+                    `还有 ${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
+            } else if (diffTime > -24 * 60 * 60 * 1000) {
+                // 出发当天或已过但在24小时内
+                document.getElementById('countdownDisplay').textContent = '✈️ 旅途愉快！';
             } else {
-                document.getElementById('countdownDays').textContent = `已出发 ${Math.abs(diffDays)} 天`;
-                document.getElementById('countdownSubtitle').textContent = '旅途中...';
+                // 已出发超过24小时
+                const passedDays = Math.floor(Math.abs(diffTime) / (1000 * 60 * 60 * 24));
+                document.getElementById('countdownDisplay').textContent = `已出发 ${passedDays} 天`;
             }
         }
 
-        // 每分钟更新一次倒计时（确保跨天时自动更新）
+        // 每秒更新一次倒计时
         function startCountdownTimer() {
             calculateCountdown();
-            setInterval(calculateCountdown, 60000); // 每60秒更新一次
+            setInterval(calculateCountdown, 1000); // 每1秒更新一次
         }
 
         function createCityCard(city) {
